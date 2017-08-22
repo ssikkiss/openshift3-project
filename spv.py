@@ -243,14 +243,13 @@ class node():
                     ret+='</li><li>err:no connect'
                     break
             loopcnt+=1
+            ret+='</li><li>recv  '+str(msg.command)
             if msg.command==b'version':
                 self.server_nStartingHeight=msg.nStartingHeight
                 print('recv version')
-                ret+='</li><li>recv  version'
                 retmsg=msg_verack(self.version)
             elif msg.command==b'verack':
                 print('recv verack')
-                ret+='</li><li>recv  verack'
                 if self.server_nStartingHeight>self.height:
                     if shash!=bhash:
                         shash=bhash
@@ -258,37 +257,29 @@ class node():
                         retmsg.locator.vHave.append(bhash)
             elif msg.command==b'ping':
                 print('recv ping')
-                ret+='</li><li>recv  ping'
                 retmsg=msg_pong(self.version)
             elif msg.command==b'pong':
                 print('recv pong')
-                ret+='</li><li>recv  pong'
             elif msg.command==b'alert':
                 print('recv alert')
-                ret+='</li><li>recv  alert'
 
             elif msg.command==b'sendheaders':
                 print('recv sendheaders')
-                ret+='</li><li>recv  sendheaders'
                 retmsg=msg_sendheaders(self.version)
             elif msg.command==b'inv':
                 print('recv inv')
-                ret+='</li><li>recv  inv'
                 if len(self.servers)<10 and addrflag:
                     retmsg=msg_getaddr(self.version)
                     addrflag=False
             elif msg.command==b'addr':
                 print('recv addr')
-                ret+='</li><li>recv  addr'
                 if len(msg.addrs)>1:
                     self.saveservers(msg.addrs)
             elif msg.command==b'getaddr':
                 print('recv getaddr')
-                ret+='</li><li>recv  getaddr'
                 retmsg=msg_addr(self.version)
             elif msg.command==b'headers':
                 print('recv headers')
-                ret+='</li><li>recv  heasers'
                 h=msg.headers
                 self.saveheaders(h)
                 if self.server_nStartingHeight>self.height:
@@ -301,7 +292,6 @@ class node():
 
             else:
                 print('recv ' +str(msg.command))
-                ret+='</li><li>recv  '+str(msg.command)
                 break
             if retmsg:
                 ret+='</li><li>send  '+str(retmsg.command)

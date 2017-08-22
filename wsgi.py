@@ -8,7 +8,7 @@ def hello():
 @application.route("/test")
 def test():
     n=spv.node()
-    ret='<font size=14>'
+    ret='<font size=14>server count:'+str(len(n.servers))
     ret+=n.work()
     ret+=spv.search()
     ret+='</font>'
