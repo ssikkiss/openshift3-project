@@ -8,20 +8,10 @@ from bitcoin.bloom import *
 from io import BytesIO 
 
 PORT = 8333
-servers=[
-    ('45.32.130.19',PORT),
-    ('138.201.55.219',PORT),
-    ('47.89.38.110',PORT),
-    ('114.55.228.40',PORT),
-    ('101.201.142.252',PORT),
-    ('136.243.139.96',PORT),
-    ('120.76.191.81',PORT)
-        ]
-
-
-bitcoin.SelectParams('mainnet') 
 
 VERSION=70012
+
+bitcoin.SelectParams('mainnet') 
 
 
 class node():
@@ -33,7 +23,6 @@ class node():
         with closing(shelve.open(self.servers_file)) as serversdb:
             for k in serversdb.keys():
                 self.servers.append(serversdb[k])
-        print('servers count:'+str(len(self.servers)))
         if len(self.servers)==0:
             self.servers=[
                 ('45.32.130.19',PORT),
@@ -286,8 +275,8 @@ class node():
                     bhash=h[len(h)-1].GetHash()
                     if shash!=bhash:
                         shash=bhash
-                        retmsg=msg_getheaders(self.version)
-                        retmsg.locator.vHave.append(bhash)
+#retmsg=msg_getheaders(self.version)
+#retmsg.locator.vHave.append(bhash)
 
 
             else:
