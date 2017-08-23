@@ -212,7 +212,7 @@ class node():
         bhash=bitcoin.core.lx(self.tophash)
         shash=None
         addrflag=True
-        while loopcnt<28:
+        while loopcnt<18:
             msg=self.recvmsg(sock)
             if not msg:
                 print('err in work:no msg')
@@ -275,8 +275,8 @@ class node():
                     bhash=h[len(h)-1].GetHash()
                     if shash!=bhash:
                         shash=bhash
-#retmsg=msg_getheaders(self.version)
-#retmsg.locator.vHave.append(bhash)
+                        retmsg=msg_getheaders(self.version)
+                        retmsg.locator.vHave.append(bhash)
 
 
             else:
