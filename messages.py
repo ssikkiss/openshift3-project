@@ -489,7 +489,7 @@ class msg_mempool(MsgSerializable):
 
 class msg_filterload(MsgSerializable):
     command = b"filterload"
-i
+
     def __init__(self, protover=70001):
         super(msg_filterload, self).__init__(protover)
         self.protover = protover
