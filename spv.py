@@ -263,7 +263,7 @@ class node():
                 if len(self.servers)<10 and addrflag:
                     retmsg=msg_getaddr(self.version)
                     addrflag=False
-                elif flag:
+                else:
                     #retmsg=msg_getdata(self.version)
                     pass
                     
