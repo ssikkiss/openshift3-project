@@ -212,7 +212,7 @@ class node():
         bhash=bitcoin.core.lx(self.tophash)
         shash=None
         addrflag=True
-        while loopcnt<18:
+        while loopcnt<28:
             msg=self.recvmsg(sock)
             if not msg:
                 print('err in work:no msg')
