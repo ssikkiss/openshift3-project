@@ -490,7 +490,7 @@ class msg_mempool(MsgSerializable):
 class msg_filterload(MsgSerializable):
     command = b"filterload"
 
-    def __init__(self, protover=70001):
+    def __init__(self, protover=PROTO_VERSION):
         super(msg_filterload, self).__init__(protover)
         self.protover = protover
         self.bloomfilter=CBloomFilter(2,0.01,0,CBloomFilter.UPDATE_ALL)
