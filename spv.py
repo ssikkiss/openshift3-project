@@ -239,11 +239,14 @@ class node():
                 retmsg=msg_verack(self.version)
             elif msg.command==b'verack':
                 print('recv verack')
-                if self.server_nStartingHeight>self.height:
-                    if shash!=bhash:
-                        shash=bhash
-                        retmsg=msg_getheaders(self.version)
-                        retmsg.locator.vHave.append(bhash)
+                retmsg=msg_filterload(self.version)
+                bloomfilter=CBloomFilter(2,0.001,0,CBloomFilter.UPDATE_ALL)
+                pubkey = x('045B81F0017E2091E2EDCD5EECF10D5BDD120A5514CB3EE65B8447EC18BFC4575C6D5BF415E54E03B1067934A0F0BA76B01C6B9AB227142EE1D543764B69D901E0')
+                pubkeyhash = bitcoin.core.Hash160(pubkey)
+                bloomfilter.insert(pubkey)
+                bloomfilter.insert(pubkeyhash)
+                retmsg.bloomfilter=bloomfilter
+                    
             elif msg.command==b'ping':
                 print('recv ping')
                 retmsg=msg_pong(self.version)
@@ -260,6 +263,11 @@ class node():
                 if len(self.servers)<10 and addrflag:
                     retmsg=msg_getaddr(self.version)
                     addrflag=False
+                elif flag:
+                    #retmsg=msg_getdata(self.version)
+                    pass
+                    
+                    
             elif msg.command==b'addr':
                 print('recv addr')
                 if len(msg.addrs)>1:
