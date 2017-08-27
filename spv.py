@@ -227,6 +227,7 @@ class node():
                 ret+='</li><li>err:no msg'
                 if  ackflag:
                     time.sleep(1)
+                    ret+='</li><li>sleep 1 sec'
                     loopcnt+=1
                     continue
                 try:
