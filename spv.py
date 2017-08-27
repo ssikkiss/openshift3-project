@@ -220,7 +220,7 @@ class node():
         shash=None
         addrflag=True
         ackflag=False
-        while loopcnt<28:
+        while loopcnt<14:
             msg=self.recvmsg(sock)
             if not msg:
                 print('err in work:no msg')
