@@ -76,7 +76,7 @@ class node():
                 try:
                     sock.sendall(body)
                 except:
-                    print('err')
+                    print('error')
                     try:
                         sock.shutdown(socket.SHUT_RDWR)
                         sock.close()
