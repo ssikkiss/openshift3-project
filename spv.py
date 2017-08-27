@@ -25,7 +25,7 @@ class node():
                 self.servers.append(serversdb[k])
         if len(self.servers)==0:
             self.servers=[
-                ('seed.bitcoin.sipa.be',PORT),
+                ('bitcoin.sipa.be',PORT),
                 ('138.201.55.219',PORT),
                 ('47.89.38.110',PORT),
                 ('114.55.228.40',PORT),
@@ -205,6 +205,7 @@ class node():
         sock=self.connect()
         if not sock:
             print('err in work:no socket')
+            print('----------   end  -----------')
             ret+='<li>err: no socket'
             ret+='</li>-------- end ---------</li></ul>'
             try:
