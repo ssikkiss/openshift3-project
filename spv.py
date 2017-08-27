@@ -8,7 +8,6 @@ from bitcoin.bloom import *
 from io import BytesIO 
 
 PORT = 8333
-
 VERSION=70012
 
 bitcoin.SelectParams('mainnet')
