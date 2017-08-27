@@ -25,7 +25,7 @@ class node():
                 self.servers.append(serversdb[k])
         if len(self.servers)==0:
             self.servers=[
-                ('45.32.130.19',PORT),
+                ('seed.bitcoin.sipa.be',PORT),
                 ('138.201.55.219',PORT),
                 ('47.89.38.110',PORT),
                 ('114.55.228.40',PORT),
@@ -206,6 +206,12 @@ class node():
         if not sock:
             print('err in work:no socket')
             ret+='<li>err: no socket'
+            ret+='</li>-------- end ---------</li></ul>'
+            try:
+                sock.shutdown(socket.SHUT_RDWR)
+                sock.close()
+            except:
+                pass
             return ret
         ret+='</li><li>connected server:'+repr(sock.getpeername())
         loopcnt=0
@@ -266,6 +272,8 @@ class node():
                 retmsg=msg_sendheaders(self.version)
             elif msg.command==b'inv':
                 print('recv inv')
+                print(msg)
+                ret+='</li><li>'+repr(msg)
                 if len(self.servers)<10 and addrflag:
                     retmsg=msg_getaddr(self.version)
                     addrflag=False
