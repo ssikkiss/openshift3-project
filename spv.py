@@ -215,9 +215,12 @@ class node():
         ackflag=False
         while loopcnt<28:
             msg=self.recvmsg(sock)
-            if not msg and not ackflag:
+            if not msg:
                 print('err in work:no msg')
                 ret+='</li><li>err:no msg'
+                if  ackflag:
+                    time.sleep(1)
+                    continue
                 try:
                     sock.shutdown(socket.SHUT_RDWR)
                     sock.close()
@@ -227,6 +230,7 @@ class node():
                 if sock:
                     print('change server')
                     ret+='</li><li>connected server:'+repr(sock.getpeername())
+                    ackflag=False
                     continue
                 else:
                     print('no connect,exit')
