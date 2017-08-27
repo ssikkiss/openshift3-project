@@ -1,6 +1,7 @@
 from flask import Flask
 import spv
 application = Flask(__name__)
+application.config['TIMEOUT']=600
 
 @application.route("/")
 def hello():
