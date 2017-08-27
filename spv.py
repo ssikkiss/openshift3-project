@@ -349,7 +349,7 @@ def showheader(hdb,strhash):
 
 def search():
     ret='<ul>-------search-------'
-    with closing(shelve.open('headers.db')) as hdb:
+    with closing(shelve.open('/data/headers.db')) as hdb:
         if 'blockheight'  not in hdb:
             ret+='<li>headers.db file is empty</li>'
             return ret
