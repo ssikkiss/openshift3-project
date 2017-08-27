@@ -227,6 +227,7 @@ class node():
                 ret+='</li><li>err:no msg'
                 if  ackflag:
                     time.sleep(1)
+                    loopcnt+=1
                     continue
                 try:
                     sock.shutdown(socket.SHUT_RDWR)
