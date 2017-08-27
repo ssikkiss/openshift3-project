@@ -18,7 +18,7 @@ class node():
     def __init__(self,version=VERSION):
         self.version=version
         self.msgstart=b'\xf9\xbe\xb4\xd9'
-        self.servers_file='/data/servers.db'
+        self.servers_file='servers.db'
         self.servers=[]
         with closing(shelve.open(self.servers_file)) as serversdb:
             for k in serversdb.keys():
@@ -34,7 +34,7 @@ class node():
                 ('120.76.191.81',PORT)
             ]
         self.addrs=[]
-        self.hfile='/data/headers.db'
+        self.hfile='headers.db'
         with closing(shelve.open(self.hfile)) as hdb:
             if 'topblockhash' in hdb:
                 self.tophash=hdb['topblockhash']
@@ -351,7 +351,7 @@ def showheader(hdb,strhash):
 
 def search():
     ret='<ul>-------search-------'
-    with closing(shelve.open('/data/headers.db')) as hdb:
+    with closing(shelve.open('headers.db')) as hdb:
         if 'blockheight'  not in hdb:
             ret+='<li>headers.db file is empty</li>'
             return ret
