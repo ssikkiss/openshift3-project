@@ -11,16 +11,18 @@ PORT = 8333
 
 VERSION=70012
 
-bitcoin.SelectParams('mainnet') 
+bitcoin.SelectParams('mainnet')
+
+SFILE='servers.db'
+HFILE='headers.db'
 
 
 class node():
     def __init__(self,version=VERSION):
         self.version=version
         self.msgstart=b'\xf9\xbe\xb4\xd9'
-        self.servers_file='servers.db'
         self.servers=[]
-        with closing(shelve.open(self.servers_file)) as serversdb:
+        with closing(shelve.open(SFILE)) as serversdb:
             for k in serversdb.keys():
                 self.servers.append(serversdb[k])
         if len(self.servers)==0:
@@ -34,8 +36,7 @@ class node():
                 ('120.76.191.81',PORT)
             ]
         self.addrs=[]
-        self.hfile='headers.db'
-        with closing(shelve.open(self.hfile)) as hdb:
+        with closing(shelve.open(HFILE)) as hdb:
             if 'topblockhash' in hdb:
                 self.tophash=hdb['topblockhash']
                 self.height = hdb['blockheight']
@@ -145,7 +146,7 @@ class node():
             return
         return True
     def saveheaders(self,headers):
-        with closing(shelve.open(self.hfile)) as hdb:
+        with closing(shelve.open(HFILE)) as hdb:
             count=0
             writecount=0
             while count<len(headers):
@@ -181,7 +182,7 @@ class node():
         zlist=sorted(servers,key=lambda x:x[1])
         count=0
         self.servers=[]
-        with closing(shelve.open(self.servers_file)) as serversdb:
+        with closing(shelve.open(SFILE)) as serversdb:
             for s in zlist:
                 print(s)
                 self.servers.append(s[0])
@@ -351,7 +352,7 @@ def showheader(hdb,strhash):
 
 def search():
     ret='<ul>-------search-------'
-    with closing(shelve.open('headers.db')) as hdb:
+    with closing(shelve.open(HFILE)) as hdb:
         if 'blockheight'  not in hdb:
             ret+='<li>headers.db file is empty</li>'
             return ret
