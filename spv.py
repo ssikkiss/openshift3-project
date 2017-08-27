@@ -260,9 +260,9 @@ class node():
                 bloomfilter.insert(pubkeyhash)
                 retmsg.bloomfilter=bloomfilter
 
-                retmsg=msg_getheaders(self.version)
-                retmsg.locator.vHave.append(bhash)
-            
+                #retmsg=msg_getheaders(self.version)
+                #retmsg.locator.vHave.append(bhash)
+                    
             elif msg.command==b'ping':
                 print('recv ping')
                 retmsg=msg_pong(self.version)
