@@ -1,7 +1,6 @@
 from flask import Flask
 import spv
 application = Flask(__name__)
-application.config['DEBUG']=True
 
 @application.route("/")
 def hello():
