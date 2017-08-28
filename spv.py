@@ -282,7 +282,8 @@ class node():
             elif msg.command==b'addr':
                 print('recv addr')
                 if len(msg.addrs)>1:
-                    self.saveservers(msg.addrs)
+#self.saveservers(msg.addrs)
+                   pass
             elif msg.command==b'getaddr':
                 print('recv getaddr')
                 retmsg=msg_addr(self.version)
