@@ -12,8 +12,8 @@ VERSION=70012
 
 bitcoin.SelectParams('mainnet')
 
-SFILE='servers.db'
-HFILE='headers.db'
+SFILE='/data/servers.db'
+HFILE='/data/headers.db'
 
 
 class node():
