@@ -12,8 +12,8 @@ VERSION=70012
 
 bitcoin.SelectParams('mainnet')
 
-SFILE='/data/servers.db'
-HFILE='/data/headers.db'
+SFILE='servers.db'
+HFILE='headers.db'
 
 
 class node():
@@ -51,7 +51,7 @@ class node():
             server=self.servers[0]
             self.servers=self.servers[1:]
             sock=socket.socket()
-            sock.settimeout(1)
+            sock.settimeout(5)
             try:
                 sock.connect(server)
             except:
