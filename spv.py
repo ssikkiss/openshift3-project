@@ -190,15 +190,6 @@ class node():
                 if count>30:
                     break
 
-
-        
-                
-
-
-
-
-
-
     def work(self):
         print('-----------  work -----------')
         ret='<ul>-------- work() --------'
@@ -220,7 +211,7 @@ class node():
         shash=None
         addrflag=True
         ackflag=False
-        while loopcnt<15:
+        while loopcnt<28:
             msg=self.recvmsg(sock)
             if not msg:
                 print('err in work:no msg')
