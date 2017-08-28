@@ -51,7 +51,7 @@ class node():
             server=self.servers[0]
             self.servers=self.servers[1:]
             sock=socket.socket()
-            sock.settimeout(5)
+            sock.settimeout(1)
             try:
                 sock.connect(server)
             except:
