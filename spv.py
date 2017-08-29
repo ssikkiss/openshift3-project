@@ -24,7 +24,7 @@ class node():
         with closing(shelve.open(SFILE)) as serversdb:
             for k in serversdb.keys():
                 self.servers.append(serversdb[k])
-        if len(self.servers)==0:
+        if len(self.servers)>-1:
             self.servers=[
                 ('bitcoin.sipa.be',PORT),
                 ('138.201.55.219',PORT),
@@ -282,7 +282,7 @@ class node():
             elif msg.command==b'addr':
                 print('recv addr')
                 if len(msg.addrs)>1:
-#self.saveservers(msg.addrs)
+                   self.saveservers(msg.addrs)
                    pass
             elif msg.command==b'getaddr':
                 print('recv getaddr')
