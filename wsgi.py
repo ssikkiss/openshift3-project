@@ -34,7 +34,7 @@ application.config.from_object(Config())
 scheduler = APScheduler()
 # it is also possible to enable the API directly
 # scheduler.api_enabled = True
-scheduler.init_app(application)
+#scheduler.init_app(application)
 scheduler.add_job(job1,'interval',seconds=20)
 scheduler.start()
 if __name__ == "__main__":
