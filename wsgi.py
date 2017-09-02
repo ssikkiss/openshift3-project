@@ -6,21 +6,12 @@ application = Flask(__name__)
 
 
 class Config(object):
-    JOBS = [
-        {
-            'id': 'job1',
-            'func': 'job1',
-            'args': (1, 2),
-            'trigger': 'interval',
-            'seconds': 10
-        }
-    ]
-
+    JOBS = []
     SCHEDULER_API_ENABLED = True
 
 
-def job1(a, b):
-    print(str(a) + ' ' + str(b))
+def job1():
+    print('hello,job')
 
     
 @application.route("/")
@@ -44,7 +35,7 @@ scheduler = APScheduler()
 # it is also possible to enable the API directly
 # scheduler.api_enabled = True
 scheduler.init_app(application)
-
+scheduler.add_job(job1,'interval',seconds=20)
 scheduler.start()
 if __name__ == "__main__":
     print('hello,flask')
