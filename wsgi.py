@@ -4,11 +4,23 @@ import spv
 import time
 application = Flask(__name__)
 
+
 class Config(object):
-    JOBS = []
+    JOBS = [
+        {
+            'id': 'job1',
+            'func': 'jobs:job1',
+            'args': (1, 2),
+            'trigger': 'interval',
+            'seconds': 10
+        }
+    ]
+
     SCHEDULER_API_ENABLED = True
-def job1():
-    print('%gggggggggggg')
+
+
+def job1(a, b):
+    print(str(a) + ' ' + str(b))
 
     
 @application.route("/")
@@ -33,7 +45,6 @@ scheduler = APScheduler()
 # scheduler.api_enabled = True
 scheduler.init_app(application)
 
-scheduler.add_job(job1,'interval',seconds=120)
 scheduler.start()
 if __name__ == "__main__":
     print('hello,flask')
