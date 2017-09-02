@@ -1,9 +1,24 @@
 from flask import Flask
+from flask_apscheduler import APScheduler
 import spv
 import time
 application = Flask(__name__)
 
+class Config(object):
+    JOBS = [
+        {
+            'id': 'job1',
+            'func': 'jobs:job1',
+            'args': (1, 2),
+            'trigger': 'interval',
+            'seconds': 120
+        }
+    ]
+    SCHEDULER_API_ENABLED = True
+def job1(a, b):
+    print(str(a) + ' ' + str(b))
 
+    
 @application.route("/")
 def hello():
     return "Hello World!ggggggggggggghhhhhg"
@@ -21,4 +36,10 @@ def test():
     return "Hello World!ggggggggggggghhhhhg"
 
 if __name__ == "__main__":
+    application.config.from_object(Config())
+    scheduler = APScheduler()
+    # it is also possible to enable the API directly
+    # scheduler.api_enabled = True
+    scheduler.init_app(application)
+    scheduler.start()
     application.run()
