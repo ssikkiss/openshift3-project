@@ -9,7 +9,7 @@ class Config(object):
     JOBS = [
         {
             'id': 'job1',
-            'func': 'jobs:job1',
+            'func': 'job1',
             'args': (1, 2),
             'trigger': 'interval',
             'seconds': 10
