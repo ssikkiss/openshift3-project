@@ -190,7 +190,7 @@ class node():
                 if count>30:
                     break
 
-    def work(self):
+    def work(self,runtime):
         print('-----------  work -----------')
         ret='<ul>-------- work() --------'
         sock=self.connect()
@@ -206,12 +206,13 @@ class node():
                 pass
             return ret
         ret+='</li><li>connected server:'+repr(sock.getpeername())
-        loopcnt=0
+        
         bhash=bitcoin.core.lx(self.tophash)
         shash=None
         addrflag=True
         ackflag=False
-        while loopcnt<25:
+        endtime=time.time()+runtime
+        while time.time()<endtime:
             msg=self.recvmsg(sock)
             if not msg:
                 print('err in work:no msg')
@@ -219,7 +220,6 @@ class node():
                 if  ackflag:
                     time.sleep(1)
                     ret+='</li><li>sleep 1 sec'
-                    loopcnt+=1
                     continue
                 try:
                     sock.shutdown(socket.SHUT_RDWR)
@@ -236,7 +236,6 @@ class node():
                     print('no connect,exit')
                     ret+='</li><li>err:no connect'
                     break
-            loopcnt+=1
             ret+='</li><li>recv  '+str(msg.command)
             if msg.command==b'version':
                 self.server_nStartingHeight=msg.nStartingHeight

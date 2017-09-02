@@ -3,34 +3,32 @@ from flask_apscheduler import APScheduler
 import spv
 import time
 application = Flask(__name__)
-
+node=spv.node()
 
 class Config(object):
     JOBS = [
         {
             'id': 'job1',
             'func': 'wsgi:job1',
-            'args': (1, 2),
+            'args': (600),
             'trigger': 'interval',
-            'seconds': 10
+            'seconds': 1000
         }
     ]
 
     SCHEDULER_API_ENABLED = True
 
 
-def job1(a, b):
-    print(str(a) + ' ' + str(b))
+def job1(runtime):
+    ret=node.work(runtime)
     
 @application.route("/")
 def hello():
     return "Hello World!ggggggggggggghhhhhg"
 @application.route("/test")
 def test():
-    n=spv.node()
     ret='<font size=14>server count:'+str(len(n.servers))
     t=time.time()
-    ret+=n.work()
     ret+=spv.search()
     t=time.time()-t
     ret+='<br>take time:'+str(t)
