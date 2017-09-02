@@ -35,11 +35,11 @@ def test():
     return ret
     return "Hello World!ggggggggggggghhhhhg"
 
+application.config.from_object(Config())
+scheduler = APScheduler()
+# it is also possible to enable the API directly
+# scheduler.api_enabled = True
+scheduler.init_app(application)
+scheduler.start()
 if __name__ == "__main__":
-    application.config.from_object(Config())
-    scheduler = APScheduler()
-    # it is also possible to enable the API directly
-    # scheduler.api_enabled = True
-    scheduler.init_app(application)
-    scheduler.start()
     application.run()
