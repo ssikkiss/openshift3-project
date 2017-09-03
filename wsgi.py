@@ -36,12 +36,27 @@ def test():
     return ret
     return "Hello World!ggggggggggggghhhhhg"
 
+
 application.config.from_object(Config())
-scheduler = APScheduler()
+scheduler = APScheduler(daemonic=True)
 # it is also possible to enable the API directly
-# scheduler.api_enabled = True
-scheduler.init_app(application)
-scheduler.start()
+scheduler.api_enabled = True
+#scheduler.init_app(application)
+#scheduler.start()
+#scheduler.pause_job('job1')
+@application.route('/pause')
+def pause():
+    ret=scheduler.pause_job('job1')
+    return 'seuccessful: '+str(ret)
+@application.route('/resume')
+def resume():
+    ret=scheduler.resume_job('job1')
+    return 'seuccessful: '+str(ret)
+@application.route('/start')
+def start():
+    ret=scheduler.add_job(job1,id='job1',args=(600),trigger='interval',seconds=1000)
+    scheduler.start()
+    return 'seuccessful: '+str(ret)
 if __name__ == "__main__":
     print('hello,flask')
     application.run()
