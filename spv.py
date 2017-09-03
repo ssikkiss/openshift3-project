@@ -209,7 +209,7 @@ class node():
         addrflag=True
         ackflag=False
         endtime=time.time()+runtime
-        while time.time()<endtime and flagcontinue:
+        while time.time()<endtime and self.flagcontinue:
             msg=self.recvmsg(sock)
             if not msg:
                 print('err in work:no msg')
