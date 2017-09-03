@@ -28,7 +28,7 @@ def hello():
     return "Hello World!ggggggggggggghhhhhg"
 @application.route("/test")
 def test():
-    ret='<font size=14>')
+    ret='<font size=14>'
     ret+=spv.search()
     ret+='</font>'
     return ret

@@ -136,7 +136,6 @@ class node():
         if not msg:
             print('msg is none')
             return
-        print('send '+str(msg.command))
         body=msg.to_bytes()
         try:
             sock.sendall(body)
@@ -266,16 +265,13 @@ class node():
                     
                     
             elif msg.command==b'addr':
-                print('recv addr')
                 if len(msg.addrs)>1:
                    self.saveservers(msg.addrs)
                    pass
             elif msg.command==b'getaddr':
-                print('recv getaddr')
                 retmsg=msg_addr(self.version)
                 
             elif msg.command==b'headers':
-                print('recv headers')
                 h=msg.headers
                 self.saveheaders(h)
                 if self.server_nStartingHeight>self.height:
@@ -287,9 +283,9 @@ class node():
 
 
             else:
-                print('recv ' +str(msg.command))
                 break
             if retmsg:
+                print('send '+str(retmsg.command))
                 self.sendmsg(retmsg,sock)
                 retmsg=None
         try:
