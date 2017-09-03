@@ -362,7 +362,9 @@ class node():
             ret+='</li><li>tophash:'
             ret+=hdb['topblockhash']
         ret+='</li><li>servers count:'
-        ret+=str(len(self.servers))+'</li></ul>'        return ret
+        ret+=str(len(self.servers))+'</li></ul>'
+        return ret
+        
 
         
 
