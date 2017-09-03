@@ -21,7 +21,7 @@ class node():
         self.version=version
         self.msgstart=b'\xf9\xbe\xb4\xd9'
         self.servers=[]
-        with closing(shelve.open(SFILE,flag='r')) as serversdb:
+        with closing(shelve.open(SFILE)) as serversdb:
             for k in serversdb.keys():
                 self.servers.append(serversdb[k])
         if len(self.servers)==0:
@@ -35,7 +35,7 @@ class node():
                 ('120.76.191.81',PORT)
             ]
         self.addrs=[]
-        with closing(shelve.open(HFILE,flag='r')) as hdb:
+        with closing(shelve.open(HFILE)) as hdb:
             if 'topblockhash' in hdb:
                 self.tophash=hdb['topblockhash']
                 self.height = hdb['blockheight']
@@ -301,50 +301,50 @@ class node():
 
 
 
-    def showheader(hdb,strhash):
-        ret='----------'
-        if strhash in hdb:
-            ret+='<li>found '+strhash
-            t=hdb[strhash]
-            s=t['height']
-            ret+='</li><li>height: '+str(s)
-            s=t['nVersion']
-            ret+='</li><li>nVersion: '+str(s)
-            s=t['hashPrevBlock']
-            ret+='</li><li>hashPrevBlock:<br>'+bitcoin.core.b2lx(s)
-            s=t['hashMerkleRoot']
-            ret+='</li><li>hashMerkleRoot:<br>'+bitcoin.core.b2lx(s)
-            s=t['nTime']
-            ret+='</li><li>nTime: '+str(s)
-            s=t['nBits']
-            ret+='</li><li>nBits: '+str(s)
-            s=t['nNonce']
-            ret+='</li><li>nNonce: '+str(s)
-        else:
-            ret='</li><li>not found:'+strhash+'</li>'
-        return ret
+def showheader(hdb,strhash):
+    ret='----------'
+    if strhash in hdb:
+        ret+='<li>found '+strhash
+        t=hdb[strhash]
+        s=t['height']
+        ret+='</li><li>height: '+str(s)
+        s=t['nVersion']
+        ret+='</li><li>nVersion: '+str(s)
+        s=t['hashPrevBlock']
+        ret+='</li><li>hashPrevBlock:<br>'+bitcoin.core.b2lx(s)
+        s=t['hashMerkleRoot']
+        ret+='</li><li>hashMerkleRoot:<br>'+bitcoin.core.b2lx(s)
+        s=t['nTime']
+        ret+='</li><li>nTime: '+str(s)
+        s=t['nBits']
+        ret+='</li><li>nBits: '+str(s)
+        s=t['nNonce']
+        ret+='</li><li>nNonce: '+str(s)
+    else:
+        ret='</li><li>not found:'+strhash+'</li>'
+    return ret
 
-    def search():
-        ret='<ul>-------search-------'
-        with closing(shelve.open(HFILE,flag='r')) as hdb:
-            if 'blockheight'  not in hdb:
-                ret+='<li>headers.db file is empty</li>'
-                return ret
-            if hdb['blockheight']==0:
-                ret+='<li>headers.db file is empty</li>'
-                return ret
-            ret+='<li>height:'+str(hdb['blockheight'])
-            ret+='</li><li>tophash:'
-            ret+=hdb['topblockhash']
+def search():
+    ret='<ul>-------search-------'
+    with closing(shelve.open(HFILE,flag='r')) as hdb:
+        if 'blockheight'  not in hdb:
+            ret+='<li>headers.db file is empty</li>'
+            return ret
+        if hdb['blockheight']==0:
+            ret+='<li>headers.db file is empty</li>'
+            return ret
+        ret+='<li>height:'+str(hdb['blockheight'])
+        ret+='</li><li>tophash:'
+        ret+=hdb['topblockhash']
 
-            h478711 ='0000000000000000003702a4567b1329ffbcc1f89dcc9d620b8fb0da4b4f5228'
-            h478717='000000000000000000e7e30d8455dffab92aaa9dddbc27426409258e9cc94581'
-            h303552='000000000000000011ee234c0f25b64c07a9a74ec33000f67530bdae5ded953a'
-            ret+=showheader(hdb,h303552)
-            ret+=showheader(hdb,hdb['topblockhash'])
-        ret+='</ul>'
+        h478711 ='0000000000000000003702a4567b1329ffbcc1f89dcc9d620b8fb0da4b4f5228'
+        h478717='000000000000000000e7e30d8455dffab92aaa9dddbc27426409258e9cc94581'
+        h303552='000000000000000011ee234c0f25b64c07a9a74ec33000f67530bdae5ded953a'
+        ret+=showheader(hdb,h303552)
+        ret+=showheader(hdb,hdb['topblockhash'])
+    ret+='</ul>'
 
-        return ret
+    return ret
 
 
 

@@ -28,12 +28,9 @@ def hello():
     return "Hello World!ggggggggggggghhhhhg"
 @application.route("/test")
 def test():
-    ret='<font size=14>server count:'+str(len(spv.node().servers))
-    t=time.time()
+    ret='<font size=14>')
     ret+=spv.search()
-    t=time.time()-t
-    ret+='<br>take time:'+str(t)
-    ret+='sec.</font>'
+    ret+='</font>'
     return ret
     return "Hello World!ggggggggggggghhhhhg"
 
