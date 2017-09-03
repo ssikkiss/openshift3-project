@@ -20,8 +20,8 @@ class Config(object):
 
 
 def job1(runtime):
-    ret=node.work(runtime)
-    print(ret)
+#ret=node.work(runtime)
+#print(ret)
     print(runtime)
     
 @application.route("/")
@@ -45,7 +45,7 @@ scheduler = APScheduler()
 #scheduler.api_enabled = True
 scheduler.init_app(application)
 scheduler.start()
-scheduler.pause_job('job1')
+#scheduler.pause_job('job1')
 @application.route('/pause')
 def pause():
     ret=scheduler.pause_job('job1')
