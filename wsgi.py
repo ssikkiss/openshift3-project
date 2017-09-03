@@ -29,7 +29,7 @@ def hello():
     return "Hello World!ggggggggggggghhhhhg"
 @application.route("/test")
 def test():
-    ret='<font size=14>server count:'+str(len(n.servers))
+    ret='<font size=14>server count:'+str(len(node.servers))
     t=time.time()
     ret+=spv.search()
     t=time.time()-t
@@ -48,11 +48,11 @@ scheduler.start()
 #scheduler.pause_job('job1')
 @application.route('/pause')
 def pause():
-    ret=scheduler.pause_job('job1')
+    scheduler.pause_job('job1')
     return 'pause seuccessful'
 @application.route('/resume')
 def resume():
-    ret=scheduler.resume_job('job1')
+    scheduler.resume_job('job1')
     return 'resume seuccessful'
 if __name__ == "__main__":
     print('hello,flask')
