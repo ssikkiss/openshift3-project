@@ -21,6 +21,7 @@ class node():
         self.version=version
         self.msgstart=b'\xf9\xbe\xb4\xd9'
         self.servers=[]
+        self.flagcontinue=True
         with closing(shelve.open(SFILE)) as serversdb:
             for k in serversdb.keys():
                 self.servers.append(serversdb[k])
@@ -47,7 +48,7 @@ class node():
         self.server_nStartingHeight=-1
 
     def connect(self):
-        while  len(self.servers)>0:
+        while  len(self.servers)>0 and self.flagcontinue:
             server=self.servers[0]
             self.servers=self.servers[1:]
             sock=socket.socket()
@@ -166,6 +167,7 @@ class node():
     def saveservers(self,addrs):
         servers=[]
         for addr in addrs:
+            if not self.flagcontinue:return
             s=(addr.ip,addr.port)
             sock=socket.socket()
             try:
@@ -207,7 +209,7 @@ class node():
         addrflag=True
         ackflag=False
         endtime=time.time()+runtime
-        while time.time()<endtime:
+        while time.time()<endtime and flagcontinue:
             msg=self.recvmsg(sock)
             if not msg:
                 print('err in work:no msg')
@@ -297,54 +299,72 @@ class node():
 
 
 
-def showheader(hdb,strhash):
-    ret='----------'
-    if strhash in hdb:
-        ret+='<li>found '+strhash
-        t=hdb[strhash]
-        s=t['height']
-        ret+='</li><li>height: '+str(s)
-        s=t['nVersion']
-        ret+='</li><li>nVersion: '+str(s)
-        s=t['hashPrevBlock']
-        ret+='</li><li>hashPrevBlock:<br>'+bitcoin.core.b2lx(s)
-        s=t['hashMerkleRoot']
-        ret+='</li><li>hashMerkleRoot:<br>'+bitcoin.core.b2lx(s)
-        s=t['nTime']
-        ret+='</li><li>nTime: '+str(s)
-        s=t['nBits']
-        ret+='</li><li>nBits: '+str(s)
-        s=t['nNonce']
-        ret+='</li><li>nNonce: '+str(s)
-    else:
-        ret='</li><li>not found:'+strhash+'</li>'
-    return ret
-
-def search():
-    ret='<ul>-------search-------'
-    if not  os.path.exists(HFILE):
-        ret+='no file:'+HFILE+'</ul>'
+    def showheader(self,hdb,strhash):
+        ret='----------'
+        if strhash in hdb:
+            ret+='<li>found '+strhash
+            t=hdb[strhash]
+            s=t['height']
+            ret+='</li><li>height: '+str(s)
+            s=t['nVersion']
+            ret+='</li><li>nVersion: '+str(s)
+            s=t['hashPrevBlock']
+            ret+='</li><li>hashPrevBlock:<br>'+bitcoin.core.b2lx(s)
+            s=t['hashMerkleRoot']
+            ret+='</li><li>hashMerkleRoot:<br>'+bitcoin.core.b2lx(s)
+            s=t['nTime']
+            ret+='</li><li>nTime: '+str(s)
+            s=t['nBits']
+            ret+='</li><li>nBits: '+str(s)
+            s=t['nNonce']
+            ret+='</li><li>nNonce: '+str(s)
+        else:
+            ret='</li><li>not found:'+strhash+'</li>'
         return ret
-    with closing(shelve.open(HFILE,flag='r')) as hdb:
-        if 'blockheight'  not in hdb:
-            ret+='<li>headers.db file is empty</li>'
+
+    def search(self):
+        ret='<ul>-------search-------'
+        if not  os.path.exists(HFILE):
+            ret+='no file:'+HFILE+'</ul>'
             return ret
-        if hdb['blockheight']==0:
-            ret+='<li>headers.db file is empty</li>'
+        with closing(shelve.open(HFILE,flag='r')) as hdb:
+            if 'blockheight'  not in hdb:
+                ret+='<li>headers.db file is empty</li>'
+                return ret
+            if hdb['blockheight']==0:
+                ret+='<li>headers.db file is empty</li>'
+                return ret
+            ret+='<li>height:'+str(hdb['blockheight'])
+            ret+='</li><li>tophash:'
+            ret+=hdb['topblockhash']
+
+            h478711 ='0000000000000000003702a4567b1329ffbcc1f89dcc9d620b8fb0da4b4f5228'
+            h478717='000000000000000000e7e30d8455dffab92aaa9dddbc27426409258e9cc94581'
+            h303552='000000000000000011ee234c0f25b64c07a9a74ec33000f67530bdae5ded953a'
+            ret+=showheader(hdb,h303552)
+            ret+=showheader(hdb,hdb['topblockhash'])
+        ret+='</ul>'
+
+        return ret
+    def getinfo(self):
+        ret='<ul>------- node info ---------'
+        if not os.path.exists(HFILE):
+            ret+='<li>file is not exists: '+HFILE+'</li></ul>'
             return ret
-        ret+='<li>height:'+str(hdb['blockheight'])
-        ret+='</li><li>tophash:'
-        ret+=hdb['topblockhash']
+        with closing(shelve.open(HFILE,flag='r')) as hdb:
+            if 'blockheight'  not in hdb:
+                ret+='<li>headers.db file is empty</li>'
+                return ret
+            if hdb['blockheight']==0:
+                ret+='<li>headers.db file is empty</li>'
+                return ret
+            ret+='<li>height:'+str(hdb['blockheight'])
+            ret+='</li><li>tophash:'
+            ret+=hdb['topblockhash']
+        ret+='</li><li>servers count:'
+        ret+=str(len(self.servers))+'</li></ul>'        return ret
 
-        h478711 ='0000000000000000003702a4567b1329ffbcc1f89dcc9d620b8fb0da4b4f5228'
-        h478717='000000000000000000e7e30d8455dffab92aaa9dddbc27426409258e9cc94581'
-        h303552='000000000000000011ee234c0f25b64c07a9a74ec33000f67530bdae5ded953a'
-        ret+=showheader(hdb,h303552)
-        ret+=showheader(hdb,hdb['topblockhash'])
-    ret+='</ul>'
-
-    return ret
-
+        
 
 
 
