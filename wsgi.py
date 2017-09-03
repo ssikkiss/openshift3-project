@@ -3,7 +3,6 @@ from flask_apscheduler import APScheduler
 import spv
 import time
 application = Flask(__name__)
-node=spv.node()
 
 class Config(object):
     JOBS = [
@@ -20,8 +19,8 @@ class Config(object):
 
 
 def job1(runtime):
+    node=spv.node()
     ret=node.work(runtime)
-    #print(ret)
     print('============================')
     
 @application.route("/")
@@ -29,7 +28,7 @@ def hello():
     return "Hello World!ggggggggggggghhhhhg"
 @application.route("/test")
 def test():
-    ret='<font size=14>server count:'+str(len(node.servers))
+    ret='<font size=14>server count:'+str(len(spv.node().servers))
     t=time.time()
     ret+=spv.search()
     t=time.time()-t
