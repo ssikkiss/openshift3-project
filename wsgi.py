@@ -10,9 +10,9 @@ class Config(object):
         {
             'id': 'job1',
             'func': 'wsgi:job1',
-            'args': (600,),
+            'args': (300,),
             'trigger': 'interval',
-            'seconds': 1000
+            'seconds': 600
         }
     ]
 
@@ -47,11 +47,13 @@ scheduler.init_app(application)
 #scheduler.start()
 @application.route('/stop')
 def stopjob():
-    scheduler.shutdown()
+    if scheduler.running:
+        scheduler.shutdown()
     return 'stop susscessful,running: '+str(scheduler.running)
 @application.route('/start')
 def startjob():
-    scheduler.start()
+    if not scheduler.running:
+        scheduler.start()
     return 'start susscessful,running: '+str(scheduler.running)
 if __name__ == "__main__":
     print('hello,flask')
