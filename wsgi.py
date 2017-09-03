@@ -52,5 +52,5 @@ def startjob():
         scheduler.start()
     return 'start susscessful,running: '+str(scheduler.running)
 if __name__ == "__main__":
-    print('hello,flask')
+    print('hello,flask!')
     application.run()
