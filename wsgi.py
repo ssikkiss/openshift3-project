@@ -3,7 +3,7 @@ from flask_apscheduler import APScheduler
 import spv
 import time
 application = Flask(__name__)
-
+node=spv.node()
 class Config(object):
     JOBS = [
         {
@@ -19,7 +19,6 @@ class Config(object):
 
 
 def job1(runtime):
-    node=spv.node()
     ret=node.work(runtime)
     print('============================')
     
