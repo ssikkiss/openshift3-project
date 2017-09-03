@@ -12,7 +12,7 @@ class Config(object):
             'func': 'wsgi:job1',
             'args': (600,),
             'trigger': 'interval',
-            'seconds': 10
+            'seconds': 1000
         }
     ]
 
@@ -20,9 +20,9 @@ class Config(object):
 
 
 def job1(runtime):
-#ret=node.work(runtime)
-#print(ret)
-    print(runtime)
+    ret=node.work(runtime)
+    #print(ret)
+    print('============================')
     
 @application.route("/")
 def hello():

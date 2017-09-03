@@ -24,7 +24,7 @@ class node():
         with closing(shelve.open(SFILE)) as serversdb:
             for k in serversdb.keys():
                 self.servers.append(serversdb[k])
-        if len(self.servers)>-1:
+        if len(self.servers)==0:
             self.servers=[
                 ('bitcoin.sipa.be',PORT),
                 ('138.201.55.219',PORT),
@@ -265,7 +265,8 @@ class node():
 
             elif msg.command==b'sendheaders':
                 print('recv sendheaders')
-                retmsg=msg_sendheaders(self.version)
+                retmsg=msg_getheaders(self.version)
+                retmsg.locator.vHave.append(bhash)
             elif msg.command==b'inv':
                 print('recv inv')
                 print(msg)
