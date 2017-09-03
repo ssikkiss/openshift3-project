@@ -38,7 +38,7 @@ def test():
 
 
 application.config.from_object(Config())
-scheduler = APScheduler(daemonic=True)
+scheduler = APScheduler()
 # it is also possible to enable the API directly
 scheduler.api_enabled = True
 #scheduler.init_app(application)
