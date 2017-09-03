@@ -44,16 +44,15 @@ scheduler = APScheduler()
 # it is also possible to enable the API directly
 #scheduler.api_enabled = True
 scheduler.init_app(application)
-scheduler.start()
-#scheduler.pause_job('job1')
-@application.route('/pause')
-def pause():
-    scheduler.pause_job('job1')
-    return 'pause seuccessful'
-@application.route('/resume')
-def resume():
-    scheduler.resume_job('job1')
-    return 'resume seuccessful'
+#scheduler.start()
+@application.route('/stop')
+def stopjob():
+    scheduler.shutdown()
+    return 'stop susscessful,running: '+str(scheduler.running)
+@application.route('/start')
+def startjob():
+    scheduler.start()
+    return 'start susscessful,running: '+str(scheduler.running)
 if __name__ == "__main__":
     print('hello,flask')
     application.run()
