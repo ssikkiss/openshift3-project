@@ -54,7 +54,7 @@ def resume():
     return 'seuccessful: '+str(ret)
 @application.route('/start')
 def start():
-    ret=scheduler.add_job(id='job1',func=job1,args=(600),trigger='interval',seconds=1000)
+    ret=scheduler.add_job(id='job1',func=job1,args=600,trigger='interval',seconds=1000)
     scheduler.start()
     return 'seuccessful: '+str(ret)
 if __name__ == "__main__":
