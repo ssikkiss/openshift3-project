@@ -10,7 +10,7 @@ class Config(object):
         {
             'id': 'job1',
             'func': 'wsgi:job1',
-            'args': (600,1),
+            'args': (600),
             'trigger': 'interval',
             'seconds': 10
         }
@@ -19,7 +19,7 @@ class Config(object):
     SCHEDULER_API_ENABLED = True
 
 
-def job1(runtime,a):
+def job1(runtime):
 #ret=node.work(runtime)
 #print(ret)
     print(runtime)
