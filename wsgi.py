@@ -21,6 +21,8 @@ class Config(object):
 
 def job1(runtime):
     ret=node.work(runtime)
+    print(ret)
+    print(runtime)
     
 @application.route("/")
 def hello():
