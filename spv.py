@@ -21,7 +21,7 @@ class node():
         self.version=version
         self.msgstart=b'\xf9\xbe\xb4\xd9'
         self.servers=[]
-        with closing(shelve.open(SFILE)) as serversdb:
+        with closing(shelve.open(SFILE,flag='r')) as serversdb:
             for k in serversdb.keys():
                 self.servers.append(serversdb[k])
         if len(self.servers)==0:
@@ -35,7 +35,7 @@ class node():
                 ('120.76.191.81',PORT)
             ]
         self.addrs=[]
-        with closing(shelve.open(HFILE)) as hdb:
+        with closing(shelve.open(HFILE,flag='r')) as hdb:
             if 'topblockhash' in hdb:
                 self.tophash=hdb['topblockhash']
                 self.height = hdb['blockheight']
@@ -192,20 +192,16 @@ class node():
 
     def work(self,runtime):
         print('-----------  work -----------')
-        ret='<ul>-------- work() --------'
         sock=self.connect()
         if not sock:
             print('err in work:no socket')
             print('----------   end  -----------')
-            ret+='<li>err: no socket'
-            ret+='</li>-------- end ---------</li></ul>'
             try:
                 sock.shutdown(socket.SHUT_RDWR)
                 sock.close()
             except:
                 pass
             return ret
-        ret+='</li><li>connected server:'+repr(sock.getpeername())
         
         bhash=bitcoin.core.lx(self.tophash)
         shash=None
@@ -216,10 +212,9 @@ class node():
             msg=self.recvmsg(sock)
             if not msg:
                 print('err in work:no msg')
-                ret+='</li><li>err:no msg'
                 if  ackflag:
                     time.sleep(1)
-                    ret+='</li><li>sleep 1 sec'
+                    print('sleep 1 sec')
                     continue
                 try:
                     sock.shutdown(socket.SHUT_RDWR)
@@ -229,20 +224,16 @@ class node():
                 sock=self.connect()
                 if sock:
                     print('change server')
-                    ret+='</li><li>connected server:'+repr(sock.getpeername())
                     ackflag=False
                     continue
                 else:
                     print('no connect,exit')
-                    ret+='</li><li>err:no connect'
                     break
-            ret+='</li><li>recv  '+str(msg.command)
+            print('recv '+str(msg.command))
             if msg.command==b'version':
                 self.server_nStartingHeight=msg.nStartingHeight
-                print('recv version')
                 retmsg=msg_verack(self.version)
             elif msg.command==b'verack':
-                print('recv verack')
                 ackflag=True
                 retmsg=msg_filterload(self.version)
                 bloomfilter=CBloomFilter(2,0.001,0,CBloomFilter.UPDATE_ALL)
@@ -256,21 +247,16 @@ class node():
                 #retmsg.locator.vHave.append(bhash)
                     
             elif msg.command==b'ping':
-                print('recv ping')
                 retmsg=msg_pong(self.version)
             elif msg.command==b'pong':
-                print('recv pong')
+                pass
             elif msg.command==b'alert':
-                print('recv alert')
-
+                pass
             elif msg.command==b'sendheaders':
-                print('recv sendheaders')
                 retmsg=msg_getheaders(self.version)
                 retmsg.locator.vHave.append(bhash)
             elif msg.command==b'inv':
                 print('recv inv')
-                print(msg)
-                ret+='</li><li>'+repr(msg)
                 if len(self.servers)<10 and addrflag:
                     retmsg=msg_getaddr(self.version)
                     addrflag=False
@@ -304,7 +290,6 @@ class node():
                 print('recv ' +str(msg.command))
                 break
             if retmsg:
-                ret+='</li><li>send  '+str(retmsg.command)
                 self.sendmsg(retmsg,sock)
                 retmsg=None
         try:
@@ -313,52 +298,50 @@ class node():
         except:
             pass
         print('----------   end  -----------')
-        ret+='</li>-------- end ---------</li></ul>'
+
+
+
+    def showheader(hdb,strhash):
+        ret='----------'
+        if strhash in hdb:
+            ret+='<li>found '+strhash
+            t=hdb[strhash]
+            s=t['height']
+            ret+='</li><li>height: '+str(s)
+            s=t['nVersion']
+            ret+='</li><li>nVersion: '+str(s)
+            s=t['hashPrevBlock']
+            ret+='</li><li>hashPrevBlock:<br>'+bitcoin.core.b2lx(s)
+            s=t['hashMerkleRoot']
+            ret+='</li><li>hashMerkleRoot:<br>'+bitcoin.core.b2lx(s)
+            s=t['nTime']
+            ret+='</li><li>nTime: '+str(s)
+            s=t['nBits']
+            ret+='</li><li>nBits: '+str(s)
+            s=t['nNonce']
+            ret+='</li><li>nNonce: '+str(s)
+        else:
+            ret='</li><li>not found:'+strhash+'</li>'
         return ret
 
+    def search():
+        ret='<ul>-------search-------'
+        with closing(shelve.open(HFILE,flag='r')) as hdb:
+            if 'blockheight'  not in hdb:
+                ret+='<li>headers.db file is empty</li>'
+                return ret
+            if hdb['blockheight']==0:
+                ret+='<li>headers.db file is empty</li>'
+                return ret
+            ret+='<li>height:'+str(hdb['blockheight'])
+            ret+='</li><li>tophash:'
+            ret+=hdb['topblockhash']
 
-
-def showheader(hdb,strhash):
-    ret='----------'
-    if strhash in hdb:
-        ret+='<li>found '+strhash
-        t=hdb[strhash]
-        s=t['height']
-        ret+='</li><li>height: '+str(s)
-        s=t['nVersion']
-        ret+='</li><li>nVersion: '+str(s)
-        s=t['hashPrevBlock']
-        ret+='</li><li>hashPrevBlock:<br>'+bitcoin.core.b2lx(s)
-        s=t['hashMerkleRoot']
-        ret+='</li><li>hashMerkleRoot:<br>'+bitcoin.core.b2lx(s)
-        s=t['nTime']
-        ret+='</li><li>nTime: '+str(s)
-        s=t['nBits']
-        ret+='</li><li>nBits: '+str(s)
-        s=t['nNonce']
-        ret+='</li><li>nNonce: '+str(s)
-    else:
-        ret='</li><li>not found:'+strhash+'</li>'
-    return ret
-
-def search():
-    ret='<ul>-------search-------'
-    with closing(shelve.open(HFILE)) as hdb:
-        if 'blockheight'  not in hdb:
-            ret+='<li>headers.db file is empty</li>'
-            return ret
-        if hdb['blockheight']==0:
-            ret+='<li>headers.db file is empty</li>'
-            return ret
-        ret+='<li>height:'+str(hdb['blockheight'])
-        ret+='</li><li>tophash:'
-        ret+=hdb['topblockhash']
-
-        h478711 ='0000000000000000003702a4567b1329ffbcc1f89dcc9d620b8fb0da4b4f5228'
-        h478717='000000000000000000e7e30d8455dffab92aaa9dddbc27426409258e9cc94581'
-        h303552='000000000000000011ee234c0f25b64c07a9a74ec33000f67530bdae5ded953a'
-        ret+=showheader(hdb,h303552)
-        ret+=showheader(hdb,hdb['topblockhash'])
+            h478711 ='0000000000000000003702a4567b1329ffbcc1f89dcc9d620b8fb0da4b4f5228'
+            h478717='000000000000000000e7e30d8455dffab92aaa9dddbc27426409258e9cc94581'
+            h303552='000000000000000011ee234c0f25b64c07a9a74ec33000f67530bdae5ded953a'
+            ret+=showheader(hdb,h303552)
+            ret+=showheader(hdb,hdb['topblockhash'])
         ret+='</ul>'
 
         return ret
