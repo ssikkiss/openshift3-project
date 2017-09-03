@@ -10,7 +10,7 @@ class Config(object):
         {
             'id': 'job1',
             'func': 'wsgi:job1',
-            'args': (600),
+            'args': (600,),
             'trigger': 'interval',
             'seconds': 10
         }
