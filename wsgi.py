@@ -40,7 +40,7 @@ def test():
 application.config.from_object(Config())
 scheduler = APScheduler()
 # it is also possible to enable the API directly
-scheduler.api_enabled = True
+#scheduler.api_enabled = True
 #scheduler.init_app(application)
 #scheduler.start()
 #scheduler.pause_job('job1')
