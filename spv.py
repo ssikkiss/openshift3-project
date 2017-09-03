@@ -323,7 +323,7 @@ def showheader(hdb,strhash):
 def search():
     ret='<ul>-------search-------'
     if not  os.path.exists(HFILE):
-        ret+='no file:'+HFILE+'</ul>
+        ret+='no file:'+HFILE+'</ul>'
         return ret
     with closing(shelve.open(HFILE,flag='r')) as hdb:
         if 'blockheight'  not in hdb:
