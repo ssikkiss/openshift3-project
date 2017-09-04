@@ -15,7 +15,7 @@ class Config(object):
         }
     ]
 
-    SCHEDULER_API_ENABLED = True
+#SCHEDULER_API_ENABLED = True
 
 
 def job1(runtime):
@@ -27,7 +27,7 @@ def job1(runtime):
 application.config.from_object(Config())
 scheduler = APScheduler()
 # it is also possible to enable the API directly
-scheduler.api_enabled = True
+#scheduler.api_enabled = True
 scheduler.init_app(application)
 scheduler.start()
 jobs=scheduler.get_jobs()
