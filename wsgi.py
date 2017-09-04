@@ -15,7 +15,7 @@ class Config(object):
         }
     ]
 
-#SCHEDULER_API_ENABLED = True
+    SCHEDULER_API_ENABLED = True
 
 
 def job1(runtime):
@@ -55,7 +55,8 @@ def test():
 def pausejob():
     node.flagcontinue=False
     #scheduler.pause_job('job1')
-    job.remove()
+    r=job.remove()
+    return repr(r)
     return 'pause susscessful'
 @application.route('/resume')
 def resumejob():
