@@ -63,5 +63,5 @@ def resumejob():
     scheduler.resume_job('job1')
     return 'resume susscessful'
 if __name__ == "__main__":
-    print('hello,flask!')
+    print('hello,flask')
     application.run()
