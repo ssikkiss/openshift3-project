@@ -55,7 +55,7 @@ def test():
 def pausejob():
     node.flagcontinue=False
     #scheduler.pause_job('job1')
-    job.pause()
+    job.remove()
     return 'pause susscessful'
 @application.route('/resume')
 def resumejob():
