@@ -27,7 +27,7 @@ def job1(runtime):
 application.config.from_object(Config())
 scheduler = APScheduler()
 # it is also possible to enable the API directly
-#scheduler.api_enabled = True
+scheduler.api_enabled = True
 scheduler.init_app(application)
 scheduler.start()
 
@@ -51,8 +51,6 @@ def test():
 @application.route('/pause')
 def pausejob():
     node.flagcontinue=False
-    #if scheduler.running:
-        #scheduler.shutdown()
     scheduler.pause_job('job1')
     return 'pause susscessful'
 @application.route('/resume')
