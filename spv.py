@@ -202,7 +202,7 @@ class node():
                 sock.close()
             except:
                 pass
-            return ret
+            return
         
         bhash=bitcoin.core.lx(self.tophash)
         shash=None
