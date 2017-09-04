@@ -30,9 +30,6 @@ scheduler = APScheduler()
 #scheduler.api_enabled = True
 scheduler.init_app(application)
 scheduler.start()
-jobs=scheduler.get_jobs()
-job=jobs[0]
-print(repr(job))
 
 @application.route("/")
 def hello():
@@ -54,8 +51,7 @@ def test():
 @application.route('/pause')
 def pausejob():
     node.flagcontinue=False
-    #scheduler.pause_job('job1')
-    r=job.remove()
+    r=scheduler.pause_job('job1')
     return repr(r)
     return 'pause susscessful'
 @application.route('/resume')
