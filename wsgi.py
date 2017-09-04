@@ -28,8 +28,6 @@ application.config.from_object(Config())
 scheduler = APScheduler()
 # it is also possible to enable the API directly
 #scheduler.api_enabled = True
-scheduler.init_app(application)
-scheduler.start()
 
 @application.route("/")
 def hello():
@@ -48,11 +46,16 @@ def test():
     return "Hello World!ggggggggggggghhhhhg"
 
 
+@application.route('/start')
+def startscheduler():
+    node.flagcontinue=True
+    scheduler.init_app(application)
+    scheduler.start()
+    return 'start susscessful'
 @application.route('/pause')
 def pausejob():
     node.flagcontinue=False
-    r=scheduler.pause_job('job1')
-    return repr(r)
+    scheduler.pause_job('job1')
     return 'pause susscessful'
 @application.route('/resume')
 def resumejob():
