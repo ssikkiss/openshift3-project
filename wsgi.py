@@ -30,6 +30,9 @@ scheduler = APScheduler()
 scheduler.api_enabled = True
 scheduler.init_app(application)
 scheduler.start()
+jobs=scheduler.get_jobs()
+job=jobs[0]
+print(repr(job))
 
 @application.route("/")
 def hello():
