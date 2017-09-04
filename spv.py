@@ -48,7 +48,7 @@ class node():
         self.server_nStartingHeight=-1
 
     def connect(self):
-        while  len(self.servers)>0 and self.flagcontinue:
+        while  len(self.servers)>0 :
             server=self.servers[0]
             self.servers=self.servers[1:]
             sock=socket.socket()
