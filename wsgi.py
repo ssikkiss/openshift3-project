@@ -11,7 +11,7 @@ class Config(object):
             'func': 'wsgi:job1',
             'args': (300,),
             'trigger': 'interval',
-            'seconds': 6
+            'seconds': 600
         }
     ]
 
@@ -19,8 +19,6 @@ class Config(object):
 
 
 def job1(runtime):
-    print('job1')
-    return
     node.work(runtime)
     print('============================')
     
