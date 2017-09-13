@@ -51,6 +51,16 @@ def startscheduler():
     node.flagcontinue=True
     scheduler.start()
     return 'start susscessful'
+@application.route('/clear')
+def clear():
+    t=node.flagcontinue
+    node.flagcontinue=False
+    scheduler.pause_job('job1')
+    node.clear()
+    node.flagcontinue=t
+    if t:
+        scheduler.resume_job('job1')
+    return 'start susscessful'
 @application.route('/pause')
 def pausejob():
     node.flagcontinue=False
