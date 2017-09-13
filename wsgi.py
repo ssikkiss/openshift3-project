@@ -19,10 +19,6 @@ class Config(object):
 
 
 def job1(runtime):
-    if len(node.servers)==0:
-        node=spv.node()
-    print('server count:')
-    print(len(node.servers))
     node.work(runtime)
 
     print('============================')
