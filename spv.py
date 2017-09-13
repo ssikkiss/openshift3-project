@@ -358,7 +358,7 @@ class node():
         ret+='</li><li>topblockhash:'
         ret+=self.tophash
         ret+='</li><li>server height:'
-        ret+=str(self.self.server_nStartingHeight)
+        ret+=str(self.server_nStartingHeight)
         ret+='</li><li>servers count:'
         ret+=str(len(self.servers))+'</li></ul>'
         return ret
