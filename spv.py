@@ -12,8 +12,8 @@ VERSION=70012
 
 bitcoin.SelectParams('mainnet')
 
-SFILE='servers.db'
-HFILE='headers.db'
+SFILE='/sdcard/servers.db'
+HFILE='/sdcard/headers.db'
 
 
 class node():
@@ -257,7 +257,6 @@ class node():
                 retmsg=msg_getheaders(self.version)
                 retmsg.locator.vHave.append(bhash)
             elif msg.command==b'inv':
-                print('recv inv')
                 if len(self.servers)<10 and addrflag:
                     retmsg=msg_getaddr(self.version)
                     addrflag=False
