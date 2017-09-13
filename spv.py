@@ -53,8 +53,6 @@ class node():
     def clear(self):
         if os.path.exists(HFILE):
             os.remove(HFILE)
-        if os.path.exists(SFILE):
-            os.remove(SFILE)
         self.__init__()
     def connect(self):
         if len(self.servers)==0:
