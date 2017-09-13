@@ -22,6 +22,13 @@ class node():
         self.msgstart=b'\xf9\xbe\xb4\xd9'
         self.flagcontinue=True
         self.addrs=[]
+        self.loadinfo()
+        self.oldhash=self.tophash
+        self.recvbuf=b''
+        self.server_nStartingHeight=-1
+        self.servers=[]
+        self.loadservers()
+    def loadinfo(self):
         with closing(shelve.open(HFILE)) as hdb:
             if 'topblockhash' in hdb:
                 self.tophash=hdb['topblockhash']
@@ -29,11 +36,6 @@ class node():
             else:
                 self.height = 0
                 self.tophash = '00'*32
-        self.oldhash=self.tophash
-        self.recvbuf=b''
-        self.server_nStartingHeight=-1
-        self.servers=[]
-        self.loadservers()
     def loadservers(self):
         with closing(shelve.open(SFILE)) as serversdb:
             for k in serversdb.keys():
@@ -337,9 +339,6 @@ class node():
             if hdb['blockheight']==0:
                 ret+='<li>headers.db file is empty</li>'
                 return ret
-            ret+='<li>height:'+str(hdb['blockheight'])
-            ret+='</li><li>tophash:'
-            ret+=hdb['topblockhash']
 
             h478711 ='0000000000000000003702a4567b1329ffbcc1f89dcc9d620b8fb0da4b4f5228'
             h478717='000000000000000000e7e30d8455dffab92aaa9dddbc27426409258e9cc94581'
@@ -351,19 +350,10 @@ class node():
         return ret
     def getinfo(self):
         ret='<ul>------- node info ---------'
-        if not os.path.exists(HFILE):
-            ret+='<li>file is not exists: '+HFILE+'</li></ul>'
-            return ret
-        with closing(shelve.open(HFILE,flag='r')) as hdb:
-            if 'blockheight'  not in hdb:
-                ret+='<li>headers.db file is empty</li>'
-                return ret
-            if hdb['blockheight']==0:
-                ret+='<li>headers.db file is empty</li>'
-                return ret
-            ret+='<li>height:'+str(hdb['blockheight'])
-            ret+='</li><li>tophash:'
-            ret+=hdb['topblockhash']
+        ret+='<li>block height:'
+        ret+=str(self.height)
+        ret+='</li><li>topblockhash:'
+        ret+=self.tophash
         ret+='</li><li>servers count:'
         ret+=str(len(self.servers))+'</li></ul>'
         return ret
