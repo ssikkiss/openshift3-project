@@ -168,6 +168,7 @@ class node():
                     t=headers[count]
                     
                     hdb[self.tophash]={'height':self.height,'nVersion':t.nVersion,'hashPrevBlock':t.hashPrevBlock,'hashMerkleRoot':t.hashMerkleRoot,'nTime':t.nTime,'nBits':t.nBits,'nNonce':t.nNonce}
+                    hdb[str(self.height)]=self.tophash
                     hdb['blockheight']=self.height
                     hdb['topblockhash']=self.tophash
                 count+=1
@@ -330,7 +331,7 @@ class node():
             ret='</li><li>not found:'+strhash+'</li>'
         return ret
 
-    def search(self):
+    def search(self,height):
         ret='<ul>-------search-------'
         if not  os.path.exists(HFILE):
             ret+='no file:'+HFILE+'</ul>'
@@ -342,12 +343,11 @@ class node():
             if hdb['blockheight']==0:
                 ret+='<li>headers.db file is empty</li>'
                 return ret
-
-            h478711 ='0000000000000000003702a4567b1329ffbcc1f89dcc9d620b8fb0da4b4f5228'
-            h478717='000000000000000000e7e30d8455dffab92aaa9dddbc27426409258e9cc94581'
-            h303552='000000000000000011ee234c0f25b64c07a9a74ec33000f67530bdae5ded953a'
-            ret+=showheader(hdb,h303552)
-            ret+=showheader(hdb,hdb['topblockhash'])
+            t=str(height)
+            if t not in hdb:
+                ret+='<li>not found</li>'
+                return ret
+            ret+=self.showheader(hdb,hdb[t])
         ret+='</ul>'
 
         return ret

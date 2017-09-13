@@ -37,10 +37,10 @@ def hello():
     ret+= node.getinfo()
     ret+='</font>'
     return ret
-@application.route("/search")
-def test():
+@application.route("/search/<int:height>")
+def search(height=0):
     ret='<font size=14>'
-    ret+=node.search()
+    ret+=node.search(height)
     ret+='</font>'
     return ret
     return "Hello World!ggggggggggggghhhhhg"
@@ -60,7 +60,7 @@ def clear():
     node.flagcontinue=t
     if t:
         scheduler.resume_job('job1')
-    return 'start susscessful'
+    return 'clear susscessful'
 @application.route('/pause')
 def pausejob():
     node.flagcontinue=False
