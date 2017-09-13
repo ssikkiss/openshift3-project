@@ -287,11 +287,11 @@ class node():
                 h=msg.headers
                 self.saveheaders(h)
                 if self.server_nStartingHeight>self.height:
-                    bhash=h[len(h)-1].GetHash()
+                    bhash=bitcoin.core.lx(self.tophash)
                     if shash!=bhash:
                         shash=bhash
                         retmsg=msg_getheaders(self.version)
-                        retmsg.locator.vHave.append(bhash)
+                        retmsg.locator.vHave.append(shash)
 
 
             else:
