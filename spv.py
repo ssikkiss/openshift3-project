@@ -20,8 +20,21 @@ class node():
     def __init__(self,version=VERSION):
         self.version=version
         self.msgstart=b'\xf9\xbe\xb4\xd9'
-        self.servers=[]
         self.flagcontinue=True
+        self.addrs=[]
+        with closing(shelve.open(HFILE)) as hdb:
+            if 'topblockhash' in hdb:
+                self.tophash=hdb['topblockhash']
+                self.height = hdb['blockheight']
+            else:
+                self.height = 0
+                self.tophash = '00'*32
+        self.oldhash=self.tophash
+        self.recvbuf=b''
+        self.server_nStartingHeight=-1
+        self.servers=[]
+        self.loadservers()
+    def loadservers(self):
         with closing(shelve.open(SFILE)) as serversdb:
             for k in serversdb.keys():
                 self.servers.append(serversdb[k])
@@ -35,19 +48,10 @@ class node():
                 ('136.243.139.96',PORT),
                 ('120.76.191.81',PORT)
             ]
-        self.addrs=[]
-        with closing(shelve.open(HFILE)) as hdb:
-            if 'topblockhash' in hdb:
-                self.tophash=hdb['topblockhash']
-                self.height = hdb['blockheight']
-            else:
-                self.height = 0
-                self.tophash = '00'*32
-        self.oldhash=self.tophash
-        self.recvbuf=b''
-        self.server_nStartingHeight=-1
 
     def connect(self):
+        if len(self.servers)==0:
+            self.loadservers()
         while  len(self.servers)>0 :
             server=self.servers[0]
             self.servers=self.servers[1:]
