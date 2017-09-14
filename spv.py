@@ -50,6 +50,14 @@ class node():
                 ('136.243.139.96',PORT),
                 ('120.76.191.81',PORT)
             ]
+            self.servers = [
+                ('bitcoin.sipa.be',PORT),
+                ('bluematt.me',PORT),
+                ('dashjr.org',PORT),
+                ('bitcoinstats.com',PORT),
+                ('xf2.org', PORT),
+                ('bitcoin.jonasschnelli.ch',PORT)
+            ]
     def clear(self):
         if os.path.exists(HFILE):
             os.remove(HFILE)
@@ -205,9 +213,11 @@ class node():
 
     def work(self,runtime):
         print('-----------  work -----------')
+        print(time.ctime(time.time()))
         sock=self.connect()
         if not sock:
             print('err in work:no socket')
+            print(time.ctime(time.time()))
             print('----------   end  -----------')
             try:
                 sock.shutdown(socket.SHUT_RDWR)
@@ -307,6 +317,7 @@ class node():
             sock.close()
         except:
             pass
+        print(time.ctime(time.time()))
         print('----------   end  -----------')
 
 
