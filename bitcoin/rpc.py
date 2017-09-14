@@ -158,13 +158,22 @@ class BaseProxy(object):
                 conf['rpcport'] = int(conf.get('rpcport', service_port))
                 conf['rpchost'] = conf.get('rpcconnect', 'localhost')
 
-                if 'rpcpassword' not in conf:
-                    raise ValueError('The value of rpcpassword not specified in the configuration file: %s' % btc_conf_file)
+                service_url = ('%s://%s:%d' %
+                    ('http', conf['rpchost'], conf['rpcport']))
 
-                service_url = ('%s://%s:%s@%s:%d' %
-                    ('http',
-                     conf['rpcuser'], conf['rpcpassword'],
-                     conf['rpchost'], conf['rpcport']))
+                cookie_dir = os.path.dirname(btc_conf_file)
+                if bitcoin.params.NAME != "mainnet":
+                    cookie_dir = os.path.join(cookie_dir, bitcoin.params.NAME)
+                cookie_file = os.path.join(cookie_dir, ".cookie")
+                try:
+                    with open(cookie_file, 'r') as fd:
+                        authpair = fd.read()
+                except IOError as err:
+                    if 'rpcpassword' in conf:
+                        authpair = "%s:%s" % (conf['rpcuser'], conf['rpcpassword'])
+
+                    else:
+                        raise ValueError('Cookie file unusable (%s) and rpcpassword not specified in the configuration file: %r' % (err, btc_conf_file))
 
         self.__service_url = service_url
         self.__url = urlparse.urlparse(service_url)
@@ -177,7 +186,6 @@ class BaseProxy(object):
         else:
             port = self.__url.port
         self.__id_count = 0
-        authpair = "%s:%s" % (self.__url.username, self.__url.password)
         authpair = authpair.encode('utf8')
         self.__auth_header = b"Basic " + base64.b64encode(authpair)
 
@@ -586,7 +594,13 @@ class Proxy(BaseProxy):
             del unspent['txid']
             del unspent['vout']
 
-            unspent['address'] = CBitcoinAddress(unspent['address'])
+            # address isn't always available as Bitcoin Core allows scripts w/o
+            # an address type to be imported into the wallet, e.g. non-p2sh
+            # segwit
+            try:
+                unspent['address'] = CBitcoinAddress(unspent['address'])
+            except KeyError:
+                pass
             unspent['scriptPubKey'] = CScript(unhexlify(unspent['scriptPubKey']))
             unspent['amount'] = int(unspent['amount'] * COIN)
             r2.append(unspent)
