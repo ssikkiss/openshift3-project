@@ -174,7 +174,7 @@ class node():
                     hdb['blockheight']=self.height
                     hdb['topblockhash']=self.tophash
                 count+=1
-            print('wrote '+str(writecount)+'\/'+str(count)+' header into headers.db :')
+            print('wrote '+str(writecount)+'/'+str(count)+' header into headers.db :')
 
     def saveservers(self,addrs):
         servers=[]
