@@ -53,6 +53,8 @@ class node():
     def clear(self):
         if os.path.exists(HFILE):
             os.remove(HFILE)
+        if os.path.exists(SFILE):
+            os.remove(SFILE)
         self.__init__()
     def connect(self):
         if len(self.servers)==0:
@@ -243,6 +245,7 @@ class node():
             print('recv '+str(msg.command))
             if msg.command==b'version':
                 self.server_nStartingHeight=msg.nStartingHeight
+                print('nStartingHeight:'+str(self.server_nStartingHeight))
                 retmsg=msg_verack(self.version)
             elif msg.command==b'verack':
                 ackflag=True
