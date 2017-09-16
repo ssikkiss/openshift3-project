@@ -51,16 +51,26 @@ def startscheduler():
     node.flagcontinue=True
     scheduler.start()
     return 'start susscessful'
-@application.route('/clear')
-def clear():
+@application.route('/clearheaders')
+def clearheaders():
     t=node.flagcontinue
     node.flagcontinue=False
     scheduler.pause_job('job1')
-    node.clear()
+    node.clearheaders()
     node.flagcontinue=t
     if t:
         scheduler.resume_job('job1')
-    return 'clear susscessful'
+    return 'clear headers susscessful'
+@application.route('/clearservers')
+def clearservers():
+    t=node.flagcontinue
+    node.flagcontinue=False
+    scheduler.pause_job('job1')
+    node.clearservers()
+    node.flagcontinue=t
+    if t:
+        scheduler.resume_job('job1')
+    return 'clear servers susscessful'
 @application.route('/pause')
 def pausejob():
     node.flagcontinue=False

@@ -58,9 +58,11 @@ class node():
                 ('xf2.org', PORT),
                 ('bitcoin.jonasschnelli.ch',PORT)
             ]
-    def clear(self):
+    def clearheaders(self):
         if os.path.exists(HFILE):
             os.remove(HFILE)
+        self.__init__()
+    def clearservers(self):
         if os.path.exists(SFILE):
             os.remove(SFILE)
         self.__init__()
