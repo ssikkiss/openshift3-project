@@ -256,9 +256,19 @@ class node():
                     break
             print('recv '+str(msg.command))
             if msg.command==b'version':
-                self.server_nStartingHeight=msg.nStartingHeight
-                print('nStartingHeight:'+str(self.server_nStartingHeight))
-                retmsg=msg_verack(self.version)
+                if msg.nStartingHeight>self.height:
+                    self.server_nStartingHeight=msg.nStartingHeight
+                    print('nStartingHeight:'+str(self.server_nStartingHeight))
+                    retmsg=msg_verack(self.version)
+                else:
+                    sock=self.connect()
+                    if sock:
+                        print('height was too less,change server')
+                        ackflag=False
+                        continue
+                    else:
+                        print('no connect,exit')
+                        break
             elif msg.command==b'verack':
                 ackflag=True
                 retmsg=msg_filterload(self.version)
