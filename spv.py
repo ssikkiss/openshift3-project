@@ -260,7 +260,7 @@ class node():
                     self.server_nStartingHeight=msg.nStartingHeight
                     print('nStartingHeight:'+str(self.server_nStartingHeight))
                     retmsg=msg_verack(self.version)
-                else:
+                elif msg.nStartingHeight!=-1:
                     sock=self.connect()
                     if sock:
                         print('height was too less,change server')
