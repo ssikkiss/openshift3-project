@@ -1,3 +1,2 @@
 gunicorn
 Flask
-flask_apscheduler
