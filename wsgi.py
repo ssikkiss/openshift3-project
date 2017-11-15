@@ -1,34 +1,26 @@
 from flask import Flask
 import urllib.request
+import pornhub
 application = Flask(__name__)
 
 @application.route("/")
 def hello():
-    ret='hello'
+    search_keywords = []
+    client = pornhub.PornHub(search_keywords)
+
+    ret=''
+    for video in client.getVideos(10,page=2):
+        ret+='<br>'+video
+    
+    for photo_url in client.getPhotos(5):
+        ret+='<br>'+photo_url
+
+    
+
     return ret
-@application.route("/site/<site>")
-def site():
-    f=open('site.txt','wt')
-    f.turncate(0)
-    f.writeline(site)
-    f.close()
-    return 'site:'+site
-@application.route("/ladder")
-def ladder():
-    f=open('site.txt','rt')
-    site=f.readline()
-    f.close()
-    response=urllib.request.urlopen(site)
-    ret=response.read()
-    return ret
-@application.route("/ladder/<path>")
-def ladder():
-    f=open('site.txt','rt')
-    site=f.readline()
-    f.close()
-    response=urllib.request.urlopen(site+'/'+path)
-    ret=response.read()
-    return ret
+
+
+
 
 if __name__ == "__main__":
     print('hello,flask')
